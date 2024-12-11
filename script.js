@@ -1,7 +1,7 @@
 
 const form = document.getElementById('info-form');
 const thankYouMessage = document.getElementById('thank-you-message');
-const scriptURL = 'https://script.google.com/macros/s/AKfycbziIrH4TS00Q1LNCxZmeKbYB0Q5q6wFNwcp6T-_Ro0oKOpLfxCcBp3oL-iSPe1ypUeolA/exec'; 
+const scriptURL = 'https://script.google.com/macros/s/AKfycbzndF1XiM5zy_BmhWAeWib4wjMncbA3VCeg1RxYMKy48tOi7OGz6UKQkuW8NOZWHM9g_A/exec'; 
 
 form.addEventListener('submit', function (event) {
     event.preventDefault(); 
@@ -9,7 +9,6 @@ form.addEventListener('submit', function (event) {
     
     const formData = {
         firstName: document.getElementById('firstName').value.trim(),
-        lastName: document.getElementById('lastName').value.trim(),
         email: document.getElementById('email').value.trim(),
         phone: document.getElementById('phone').value.trim(),
         zipCode: document.getElementById('zipCode').value.trim(),
