@@ -1,32 +1,46 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("info-form");
 
-const form = document.getElementById('info-form');
-const thankYouMessage = document.getElementById('thank-you-message');
-const scriptURL = 'https://script.google.com/macros/s/AKfycbzndF1XiM5zy_BmhWAeWib4wjMncbA3VCeg1RxYMKy48tOi7OGz6UKQkuW8NOZWHM9g_A/exec'; 
+    // Объявляем переменные URL и токен выше функции
+    const POST_URL = "https://ldblt.com/post/d0572dad-4f5e-43e3-a6c2-07abcb60160e";
+    const AUTH_TOKEN = "Y2RjYTdkMzI4ZGQyNGY0N2ExZmRlMmU3Mjc0MjgyM2Q6YTBhNWE3ZDBmYTNjNzEwNjQ4ZjkzNTk3YzRmOTA2N2M=";
 
-form.addEventListener('submit', function (event) {
-    event.preventDefault(); 
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault(); // Останавливаем стандартное поведение формы
 
-    
-    const formData = {
-        firstName: document.getElementById('firstName').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        zipCode: document.getElementById('zipCode').value.trim(),
-    };
+        // Собираем данные формы
+        const formData = {
+            first_name: form.firstName.value.trim(),
+            last_name: form.lastName.value.trim(),
+            email: form.email.value.trim(),
+            phone: form.phone.value.trim(),
+            zip_code: form.zipCode.value.trim()
+        };
 
-    fetch(scriptURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-        mode: 'no-cors', 
-    })
-        .then((response) => {
-            console.log('Request sent. Response status cannot be read in no-cors mode.');
-            form.style.display = 'none';
-            thankYouMessage.style.display = 'block';
-        })
-        .catch((error) => {
-            console.error('Fetch error:', error.message);
-            alert('Error: ' + error.message);
-        });
+        try {
+            // Отправляем POST-запрос
+            const response = await fetch(POST_URL, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Basic ${AUTH_TOKEN}`,
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: new URLSearchParams(formData)
+            });
+
+            const result = await response.json(); // Парсим JSON-ответ
+
+            if (result.success) {
+                console.log("Lead successfully submitted:", result);
+                alert(`Lead successfully submitted! Lead ID: ${result.lead_id}`);
+                form.reset(); // Очищаем форму
+            } else {
+                console.error("Error submitting lead:", result.errors);
+                alert("Error submitting lead: " + result.errors.join(", "));
+            }
+        } catch (error) {
+            console.error("Request error:", error);
+            alert("An error occurred. Please try again later.");
+        }
+    });
 });
